@@ -11,8 +11,9 @@ const fmDelimiter = "---"
 
 // Split separates a document into its frontmatter source and markdown body.
 // The document must start with a `---` line and contain a closing one.
+// CRLF line endings are normalized so files edited anywhere parse.
 func Split(src []byte) (fm, body []byte, err error) {
-	s := string(src)
+	s := strings.ReplaceAll(string(src), "\r\n", "\n")
 	rest, ok := strings.CutPrefix(s, fmDelimiter+"\n")
 	if !ok {
 		return nil, nil, fmt.Errorf("missing frontmatter opening %q", fmDelimiter)

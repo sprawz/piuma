@@ -32,6 +32,19 @@ func TestSplitErrors(t *testing.T) {
 	}
 }
 
+func TestSplitCRLF(t *testing.T) {
+	fm, body, err := Split([]byte("---\r\ntitle: hello\r\n---\r\nBody\r\n"))
+	if err != nil {
+		t.Fatalf("Split: %v", err)
+	}
+	if got := string(fm); got != "title: hello\n" {
+		t.Errorf("frontmatter = %q", got)
+	}
+	if got := string(body); got != "Body\n" {
+		t.Errorf("body = %q", got)
+	}
+}
+
 func TestParse(t *testing.T) {
 	src := []byte(`publishDate: 2026-07-07T16:00:00Z
 title: 'Writing hexdump from scratch'

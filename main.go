@@ -11,7 +11,6 @@ import (
 	"os"
 
 	"github.com/paolobietolini/piuma/internal/build"
-	"github.com/paolobietolini/piuma/internal/content"
 	"github.com/paolobietolini/piuma/internal/server"
 )
 
@@ -96,13 +95,14 @@ func runDev(args []string) error {
 	return server.Serve(*addr, cfg)
 }
 
-// runFormat validates the content tree: every post must parse and carry
-// its required frontmatter. It rewrites nothing — the useful part of a
-// formatter here is the check, not canonicalized prose.
+// runFormat validates the site: every post and page must parse and
+// carry its required frontmatter, and the templates must compile. It
+// rewrites nothing — the useful part of a formatter here is the check,
+// not canonicalized prose.
 func runFormat(args []string) error {
 	fs := flag.NewFlagSet("format", flag.ExitOnError)
 	cfg := build.DefaultConfig(siteFlags(fs, args))
-	site, err := content.Load(cfg.ContentDir, cfg.PagesDir)
+	site, err := build.Validate(cfg)
 	if err != nil {
 		return err
 	}
