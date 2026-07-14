@@ -63,11 +63,6 @@ func TestBuildWithoutHomepage(t *testing.T) {
 	if got := readFile(t, filepath.Join(out, "robots.txt")); got != "User-agent: *\n" {
 		t.Errorf("static file not copied verbatim: %q", got)
 	}
-	// static/ must also exist under payload/ so a subdomain vhost
-	// rooted there is self-contained.
-	if got := readFile(t, filepath.Join(out, "payload/robots.txt")); got != "User-agent: *\n" {
-		t.Errorf("static not duplicated into payload/: %q", got)
-	}
 }
 
 func TestBuildWithHomepage(t *testing.T) {

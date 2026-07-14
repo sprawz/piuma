@@ -126,11 +126,6 @@ func renderSite(outDir string, cfg Config, tpl *render.Templates, site *content.
 	if err := copyStatic(cfg.StaticDir, outDir); err != nil {
 		return err
 	}
-	// The blog subtree gets its own copy of static/ so a subdomain
-	// vhost rooted at payload/ finds /styles.css, /images/... itself.
-	if err := copyStatic(cfg.StaticDir, filepath.Join(outDir, "payload")); err != nil {
-		return err
-	}
 	for _, p := range site.Posts {
 		if err := writePost(outDir, tpl, p); err != nil {
 			return fmt.Errorf("%s: %w", p.URL(), err)
