@@ -7,7 +7,7 @@ import (
 	"io/fs"
 	"os"
 
-	"github.com/paolobietolini/mdparser/internal/content"
+	"github.com/paolobietolini/piuma/internal/content"
 )
 
 //go:embed templates/*.html

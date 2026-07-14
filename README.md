@@ -1,4 +1,4 @@
-# mdparser
+# piuma
 
 Minimal static site builder for paolobietolini.com. Markdown in, HTML out,
 almost everything standard library.
@@ -6,9 +6,9 @@ almost everything standard library.
 ## Commands
 
 ```
-mdparser build  [-dir site] [-out public]   render the site into public/
-mdparser dev    [-dir site] [-addr :8080]   local server, rebuilds on change
-mdparser format [-dir site]                 validate all content, exit 1 on problems
+piuma build  [-dir site] [-out public]   render the site into public/
+piuma dev    [-dir site] [-addr :8080]   local server, rebuilds on change
+piuma format [-dir site]                 validate all content, exit 1 on problems
 ```
 
 ## Site layout
@@ -32,7 +32,7 @@ lists, one nested map — parsed by a hand-written parser
 - `internal/build`   — orchestrates a full build
 - `internal/server`  — dev server + mtime-polling watcher
 
-Design notes: `docs/superpowers/specs/2026-07-14-mdparser-design.md`.
+Design notes: `docs/superpowers/specs/2026-07-14-piuma-design.md`.
 
 ## Tests
 

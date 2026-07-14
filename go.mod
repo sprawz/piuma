@@ -1,4 +1,4 @@
-module github.com/paolobietolini/mdparser
+module github.com/paolobietolini/piuma
 
 go 1.26.2
 

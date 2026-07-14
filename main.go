@@ -1,8 +1,8 @@
-// mdparser is a minimal static site builder: markdown in, HTML out.
+// piuma is a minimal static site builder: markdown in, HTML out.
 //
-//	mdparser build [-dir site] [-out public]   render the site
-//	mdparser dev   [-dir site] [-addr :8080]   serve with live rebuild
-//	mdparser format [-dir site]                validate all content
+//	piuma build [-dir site] [-out public]   render the site
+//	piuma dev   [-dir site] [-addr :8080]   serve with live rebuild
+//	piuma format [-dir site]                validate all content
 package main
 
 import (
@@ -10,9 +10,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/paolobietolini/mdparser/internal/build"
-	"github.com/paolobietolini/mdparser/internal/content"
-	"github.com/paolobietolini/mdparser/internal/server"
+	"github.com/paolobietolini/piuma/internal/build"
+	"github.com/paolobietolini/piuma/internal/content"
+	"github.com/paolobietolini/piuma/internal/server"
 )
 
 func main() {
@@ -37,7 +37,7 @@ func main() {
 }
 
 func usage() {
-	fmt.Fprintln(os.Stderr, "usage: mdparser <build|dev|format> [flags]")
+	fmt.Fprintln(os.Stderr, "usage: piuma <build|dev|format> [flags]")
 	os.Exit(2)
 }
 

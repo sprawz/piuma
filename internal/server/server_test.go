@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/paolobietolini/mdparser/internal/build"
+	"github.com/paolobietolini/piuma/internal/build"
 )
 
 func fixtureSite(t *testing.T) build.Config {
