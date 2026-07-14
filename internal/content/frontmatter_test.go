@@ -92,12 +92,12 @@ func TestParseSkipsBlankLines(t *testing.T) {
 
 func TestParseErrors(t *testing.T) {
 	for name, src := range map[string]string{
-		"no colon":            "just text\n",
-		"tab indent":          "tags:\n\t- a\n",
-		"mixed list and map":  "tags:\n  - a\n  key: v\n",
-		"empty nested block":  "metadata:\n",
-		"scalar then indent":  "title: x\n  stray: y\n",
-		"unterminated quote":  "excerpt: 'never closed\n",
+		"no colon":           "just text\n",
+		"tab indent":         "tags:\n\t- a\n",
+		"mixed list and map": "tags:\n  - a\n  key: v\n",
+		"empty nested block": "metadata:\n",
+		"scalar then indent": "title: x\n  stray: y\n",
+		"unterminated quote": "excerpt: 'never closed\n",
 	} {
 		t.Run(name, func(t *testing.T) {
 			if _, err := Parse([]byte(src)); err == nil {
