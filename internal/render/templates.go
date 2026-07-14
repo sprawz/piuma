@@ -2,10 +2,11 @@ package render
 
 import (
 	"embed"
+	"fmt"
 	"html/template"
 	"io"
-	"io/fs"
 	"os"
+	"path/filepath"
 
 	"github.com/paolobietolini/piuma/internal/content"
 )
@@ -47,10 +48,11 @@ type Templates struct {
 	index *template.Template
 }
 
-// LoadTemplates reads layout.html, post.html, page.html and index.html
-// from dir. If dir is empty or missing, embedded defaults are used.
+// LoadTemplates reads layout.html, post.html, page.html and index.html.
+// Each file is looked up in dir first and falls back to the embedded
+// default, so a site only keeps the templates it actually customizes.
 func LoadTemplates(dir string) (*Templates, error) {
-	fsys, err := templateFS(dir)
+	layout, err := readTemplate(dir, "layout.html")
 	if err != nil {
 		return nil, err
 	}
@@ -60,23 +62,35 @@ func LoadTemplates(dir string) (*Templates, error) {
 		"page.html":  &t.page,
 		"index.html": &t.index,
 	} {
-		*dst, err = template.New("").Funcs(funcs).ParseFS(fsys, "layout.html", name)
+		src, err := readTemplate(dir, name)
 		if err != nil {
 			return nil, err
 		}
+		tpl, err := template.New("layout.html").Funcs(funcs).Parse(string(layout))
+		if err != nil {
+			return nil, fmt.Errorf("layout.html: %w", err)
+		}
+		if _, err := tpl.New(name).Parse(string(src)); err != nil {
+			return nil, fmt.Errorf("%s: %w", name, err)
+		}
+		*dst = tpl
 	}
 	return t, nil
 }
 
-func templateFS(dir string) (fs.FS, error) {
+// readTemplate returns dir/name when it exists, the embedded default
+// otherwise.
+func readTemplate(dir, name string) ([]byte, error) {
 	if dir != "" {
-		if _, err := os.Stat(dir); err == nil {
-			return os.DirFS(dir), nil
-		} else if !os.IsNotExist(err) {
+		src, err := os.ReadFile(filepath.Join(dir, name))
+		if err == nil {
+			return src, nil
+		}
+		if !os.IsNotExist(err) {
 			return nil, err
 		}
 	}
-	return fs.Sub(defaultTemplates, "templates")
+	return defaultTemplates.ReadFile("templates/" + name)
 }
 
 // Post renders a single post page.

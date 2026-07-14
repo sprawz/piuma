@@ -34,7 +34,7 @@ func TestEmbeddedPostTemplate(t *testing.T) {
 	out := b.String()
 	for _, want := range []string{
 		"Hello World", "<em>there</em>", "A description.",
-		`href="/words/tags/google-tag-manager/"`,
+		`href="/payload/tags/google-tag-manager/"`,
 	} {
 		if !strings.Contains(out, want) {
 			t.Errorf("post output missing %q:\n%s", want, out)
@@ -70,10 +70,41 @@ func TestEmbeddedIndexTemplate(t *testing.T) {
 		t.Fatalf("Index: %v", err)
 	}
 	out := b.String()
-	for _, want := range []string{"Hello World", `href="/words/hello"`, "<h1>gtm</h1>"} {
+	for _, want := range []string{"Hello World", `href="/payload/hello"`, "<h1>gtm</h1>"} {
 		if !strings.Contains(out, want) {
 			t.Errorf("index output missing %q:\n%s", want, out)
 		}
+	}
+}
+
+func TestLoadTemplatesPartialOverride(t *testing.T) {
+	// A site overriding only index.html must get embedded defaults for
+	// layout, post and page — no need to copy every template.
+	dir := t.TempDir()
+	custom := `{{define "content"}}CUSTOM INDEX{{end}}`
+	if err := os.WriteFile(filepath.Join(dir, "index.html"), []byte(custom), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	tpl, err := LoadTemplates(dir)
+	if err != nil {
+		t.Fatalf("LoadTemplates: %v", err)
+	}
+	var b strings.Builder
+	if err := tpl.Index(&b, IndexData{}); err != nil {
+		t.Fatalf("Index: %v", err)
+	}
+	if !strings.Contains(b.String(), "CUSTOM INDEX") {
+		t.Errorf("custom index not used:\n%s", b.String())
+	}
+	if !strings.Contains(b.String(), "<!doctype html>") {
+		t.Errorf("embedded layout not used around custom index:\n%s", b.String())
+	}
+	b.Reset()
+	if err := tpl.Post(&b, PostData{Post: samplePost()}); err != nil {
+		t.Fatalf("Post: %v", err)
+	}
+	if !strings.Contains(b.String(), "Hello World") {
+		t.Errorf("embedded post template broken:\n%s", b.String())
 	}
 }
 

@@ -14,7 +14,7 @@ piuma format [-dir site]                 validate all content, exit 1 on problem
 ## Site layout
 
 ```
-content/<slug>.md              posts; URL becomes /words/<slug>
+content/<slug>.md              posts; URL becomes /payload/<slug>
 pages/<name>.md                standalone pages; pages/index.md is the homepage
 templates/                     layout.html, post.html, index.html (optional,
                                embedded defaults used when missing)

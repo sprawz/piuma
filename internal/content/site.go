@@ -10,9 +10,9 @@ import (
 	"strings"
 )
 
-// Reserved slugs: /words is the blog root, /words/tags the tag listings.
+// Reserved slugs: /payload is the blog root, /payload/tags the tag listings.
 const (
-	reservedPageSlug = "words"
+	reservedPageSlug = "payload"
 	reservedPostSlug = "tags"
 )
 

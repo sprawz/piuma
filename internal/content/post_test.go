@@ -44,7 +44,7 @@ func TestParsePost(t *testing.T) {
 	if len(p.Tags) != 2 || p.Tags[0] != "programming" || p.Tags[1] != "C" {
 		t.Errorf("Tags = %v", p.Tags)
 	}
-	if p.URL() != "/words/writing-hexdump-from-scratch" {
+	if p.URL() != "/payload/writing-hexdump-from-scratch" {
 		t.Errorf("URL = %q", p.URL())
 	}
 	if !strings.Contains(string(p.Body), "Body text.") {
