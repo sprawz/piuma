@@ -57,7 +57,11 @@ Flags (all commands):
 
 Flags (build):
   -out string    output directory (default <dir>/public);
-                 wiped on every build
+                 wiped on every build. Refused if it contains
+                 the site's source directories.
+  -base string   absolute site URL (https://example.com); when set,
+                 sitemap.xml, atom.xml and llms.txt are generated
+                 at the output root
 
 Flags (dev):
   -addr string   listen address (default ":8080")
@@ -77,10 +81,12 @@ func siteFlags(fs *flag.FlagSet, args []string) string {
 func runBuild(args []string) error {
 	fs := flag.NewFlagSet("build", flag.ExitOnError)
 	out := fs.String("out", "", "output directory (default <dir>/public)")
+	base := fs.String("base", "", "absolute site URL; enables sitemap.xml, atom.xml, llms.txt")
 	cfg := build.DefaultConfig(siteFlags(fs, args))
 	if *out != "" {
 		cfg.OutDir = *out
 	}
+	cfg.BaseURL = *base
 	if err := build.Build(cfg); err != nil {
 		return err
 	}

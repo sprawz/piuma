@@ -92,6 +92,16 @@ func TestParseMultilineQuotedScalar(t *testing.T) {
 	}
 }
 
+func TestParseEscapedSingleQuote(t *testing.T) {
+	got, err := Parse([]byte("title: 'L''obiettivo'\n"))
+	if err != nil {
+		t.Fatalf("Parse: %v", err)
+	}
+	if got["title"] != "L'obiettivo" {
+		t.Errorf("title = %q, want %q", got["title"], "L'obiettivo")
+	}
+}
+
 func TestParseSkipsBlankLines(t *testing.T) {
 	got, err := Parse([]byte("title: a\n\ncategory: b\n"))
 	if err != nil {

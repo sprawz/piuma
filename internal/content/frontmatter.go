@@ -131,7 +131,12 @@ func quoteClosed(s string, q byte) bool {
 
 func unquote(s string) string {
 	if len(s) >= 2 && (s[0] == '\'' || s[0] == '"') && s[len(s)-1] == s[0] {
-		return s[1 : len(s)-1]
+		inner := s[1 : len(s)-1]
+		if s[0] == '\'' {
+			// YAML escapes a single quote inside single quotes by doubling it.
+			inner = strings.ReplaceAll(inner, "''", "'")
+		}
+		return inner
 	}
 	return s
 }
