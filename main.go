@@ -17,7 +17,8 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		usage()
+		usage(os.Stderr)
+		os.Exit(2)
 	}
 	var err error
 	switch cmd := os.Args[1]; cmd {
@@ -27,8 +28,12 @@ func main() {
 		err = runDev(os.Args[2:])
 	case "format":
 		err = runFormat(os.Args[2:])
+	case "help", "-h", "-help", "--help":
+		usage(os.Stdout)
 	default:
-		usage()
+		fmt.Fprintf(os.Stderr, "piuma: unknown command %q\n\n", cmd)
+		usage(os.Stderr)
+		os.Exit(2)
 	}
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -36,9 +41,30 @@ func main() {
 	}
 }
 
-func usage() {
-	fmt.Fprintln(os.Stderr, "usage: piuma <build|dev|format> [flags]")
-	os.Exit(2)
+func usage(w *os.File) {
+	fmt.Fprint(w, `piuma — minimal static site builder: markdown in, HTML out.
+
+usage: piuma <command> [flags]
+
+Commands:
+  build    render the site into the output directory
+  dev      serve the site locally, rebuilding on every change
+  format   validate all content (frontmatter, required fields, slug
+           collisions); exits 1 listing every problem found
+  help     show this help
+
+Flags (all commands):
+  -dir string    site root directory (default ".")
+
+Flags (build):
+  -out string    output directory (default <dir>/public);
+                 wiped on every build
+
+Flags (dev):
+  -addr string   listen address (default ":8080")
+
+Run "piuma <command> -h" for that command's flags.
+`)
 }
 
 // siteFlags defines the flags shared by every command and returns the
