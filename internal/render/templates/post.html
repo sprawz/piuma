@@ -1,0 +1,8 @@
+{{define "title"}}{{.Post.Title}}{{end}}
+{{define "meta"}}<meta name="description" content="{{.Post.Description}}">{{end}}
+{{define "content"}}
+<article>
+  <p><time datetime="{{.Post.PublishDate.Format "2006-01-02"}}">{{.Post.PublishDate.Format "January 2, 2006"}}</time></p>
+  {{.Content}}
+</article>
+{{end}}

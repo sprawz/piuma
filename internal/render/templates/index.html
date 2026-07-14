@@ -1,0 +1,11 @@
+{{define "content"}}
+<ul>
+{{range .Posts}}
+  <li>
+    <a href="{{.URL}}">{{.Title}}</a>
+    <time datetime="{{.PublishDate.Format "2006-01-02"}}">{{.PublishDate.Format "January 2, 2006"}}</time>
+    {{with .Excerpt}}<p>{{.}}</p>{{end}}
+  </li>
+{{end}}
+</ul>
+{{end}}
