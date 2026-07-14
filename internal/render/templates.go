@@ -13,6 +13,9 @@ import (
 //go:embed templates/*.html
 var defaultTemplates embed.FS
 
+// HTML marks pre-rendered markup as safe to inject into templates.
+type HTML = template.HTML
+
 // PostData is what the post page template receives.
 type PostData struct {
 	Post    *content.Post
