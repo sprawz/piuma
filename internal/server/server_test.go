@@ -14,7 +14,7 @@ import (
 func fixtureSite(t *testing.T) build.Config {
 	t.Helper()
 	root := t.TempDir()
-	post := filepath.Join(root, "content/code/hello.md")
+	post := filepath.Join(root, "content/hello.md")
 	if err := os.MkdirAll(filepath.Dir(post), 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -44,7 +44,7 @@ func TestHandlerServesBuiltSite(t *testing.T) {
 	ts := httptest.NewServer(Handler(cfg.OutDir))
 	defer ts.Close()
 
-	if code, body := get(t, ts, "/code/hello/"); code != 200 || !strings.Contains(body, "Body one.") {
+	if code, body := get(t, ts, "/words/hello/"); code != 200 || !strings.Contains(body, "Body one.") {
 		t.Errorf("post page: code=%d body=%q", code, body)
 	}
 	if code, body := get(t, ts, "/"); code != 200 || !strings.Contains(body, "Hello") {

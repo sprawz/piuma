@@ -31,7 +31,7 @@ func Serve(addr string, cfg build.Config) error {
 		// First build may legitimately fail while drafting; dev keeps going.
 		log.Printf("initial build failed:\n%v", err)
 	}
-	watched := []string{cfg.ContentDir, cfg.TemplateDir, cfg.StaticDir}
+	watched := []string{cfg.ContentDir, cfg.PagesDir, cfg.TemplateDir, cfg.StaticDir}
 	go Watch(context.Background(), watched, pollInterval, rebuild)
 	log.Printf("serving %s on http://localhost%s", cfg.OutDir, addr)
 	return http.ListenAndServe(addr, Handler(cfg.OutDir))

@@ -13,10 +13,10 @@ import (
 func samplePost() *content.Post {
 	return &content.Post{
 		Slug:        "hello",
-		Category:    "code",
 		Title:       "Hello World",
 		Excerpt:     "An excerpt.",
 		Description: "A description.",
+		Tags:        []string{"Google Tag Manager"},
 		PublishDate: time.Date(2026, 7, 7, 16, 0, 0, 0, time.UTC),
 	}
 }
@@ -32,9 +32,30 @@ func TestEmbeddedPostTemplate(t *testing.T) {
 		t.Fatalf("Post: %v", err)
 	}
 	out := b.String()
-	for _, want := range []string{"Hello World", "<em>there</em>", "A description."} {
+	for _, want := range []string{
+		"Hello World", "<em>there</em>", "A description.",
+		`href="/words/tags/google-tag-manager/"`,
+	} {
 		if !strings.Contains(out, want) {
 			t.Errorf("post output missing %q:\n%s", want, out)
+		}
+	}
+}
+
+func TestEmbeddedPageTemplate(t *testing.T) {
+	tpl, err := LoadTemplates("")
+	if err != nil {
+		t.Fatalf("LoadTemplates: %v", err)
+	}
+	pg := &content.Page{Slug: "index", Title: "Paolo Bietolini", Description: "Bio."}
+	var b strings.Builder
+	if err := tpl.Page(&b, PageData{Page: pg, Content: "<p>presenting</p>"}); err != nil {
+		t.Fatalf("Page: %v", err)
+	}
+	out := b.String()
+	for _, want := range []string{"Paolo Bietolini", "<p>presenting</p>", "Bio."} {
+		if !strings.Contains(out, want) {
+			t.Errorf("page output missing %q:\n%s", want, out)
 		}
 	}
 }
@@ -45,11 +66,11 @@ func TestEmbeddedIndexTemplate(t *testing.T) {
 		t.Fatalf("LoadTemplates: %v", err)
 	}
 	var b strings.Builder
-	if err := tpl.Index(&b, IndexData{Posts: []*content.Post{samplePost()}}); err != nil {
+	if err := tpl.Index(&b, IndexData{Heading: "gtm", Posts: []*content.Post{samplePost()}}); err != nil {
 		t.Fatalf("Index: %v", err)
 	}
 	out := b.String()
-	for _, want := range []string{"Hello World", `href="/code/hello"`} {
+	for _, want := range []string{"Hello World", `href="/words/hello"`, "<h1>gtm</h1>"} {
 		if !strings.Contains(out, want) {
 			t.Errorf("index output missing %q:\n%s", want, out)
 		}
@@ -61,6 +82,7 @@ func TestLoadTemplatesFromDir(t *testing.T) {
 	files := map[string]string{
 		"layout.html": `<html><body>{{block "content" .}}{{end}}</body></html>`,
 		"post.html":   `{{define "content"}}CUSTOM {{.Post.Title}}{{end}}`,
+		"page.html":   `{{define "content"}}CUSTOM PAGE{{end}}`,
 		"index.html":  `{{define "content"}}CUSTOM INDEX{{end}}`,
 	}
 	for name, src := range files {

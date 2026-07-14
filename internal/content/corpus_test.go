@@ -10,32 +10,33 @@ import (
 // this machine, guarding the frontmatter subset against real-world files.
 func TestRealBlogCorpus(t *testing.T) {
 	home, _ := os.UserHomeDir()
-	root := filepath.Join(home, "code/paolobietolini.com/src/content/blog")
-	if _, err := os.Stat(root); err != nil {
-		t.Skipf("real blog not available: %v", err)
+	root := firstExisting(
+		filepath.Join(home, "code/paolobietolini.com/content"),
+		filepath.Join(home, "code/paolobietolini.com/src/content/blog"),
+	)
+	if root == "" {
+		t.Skip("real blog not available")
 	}
 	n := 0
-	err := filepath.WalkDir(root, func(path string, d os.DirEntry, err error) error {
-		if err != nil || d.IsDir() || filepath.Ext(path) != ".md" {
-			return err
-		}
+	for _, e := range walkMarkdown(root, func(path, slug string) error {
 		n++
 		src, err := os.ReadFile(path)
 		if err != nil {
 			return err
 		}
-		fm, _, err := Split(src)
-		if err != nil {
-			t.Errorf("%s: %v", path, err)
-			return nil
-		}
-		if _, err := Parse(fm); err != nil {
-			t.Errorf("%s: %v", path, err)
-		}
-		return nil
-	})
-	if err != nil {
-		t.Fatal(err)
+		_, err = ParsePost(src, slug)
+		return err
+	}) {
+		t.Error(e)
 	}
-	t.Logf("parsed %d posts", n)
+	t.Logf("parsed %d posts from %s", n, root)
+}
+
+func firstExisting(paths ...string) string {
+	for _, p := range paths {
+		if _, err := os.Stat(p); err == nil {
+			return p
+		}
+	}
+	return ""
 }

@@ -76,10 +76,10 @@ func runDev(args []string) error {
 func runFormat(args []string) error {
 	fs := flag.NewFlagSet("format", flag.ExitOnError)
 	cfg := build.DefaultConfig(siteFlags(fs, args))
-	site, err := content.LoadSite(cfg.ContentDir)
+	site, err := content.Load(cfg.ContentDir, cfg.PagesDir)
 	if err != nil {
 		return err
 	}
-	fmt.Printf("ok: %d posts\n", len(site.Posts))
+	fmt.Printf("ok: %d posts, %d pages\n", len(site.Posts), len(site.Pages))
 	return nil
 }

@@ -4,5 +4,10 @@
 <article>
   <p><time datetime="{{.Post.PublishDate.Format "2006-01-02"}}">{{.Post.PublishDate.Format "January 2, 2006"}}</time></p>
   {{.Content}}
+  {{with .Post.Tags}}
+  <p class="tags">
+    {{range .}}<a href="/words/tags/{{tagslug .}}/">#{{.}}</a> {{end}}
+  </p>
+  {{end}}
 </article>
 {{end}}

@@ -1,0 +1,5 @@
+{{define "title"}}{{.Page.Title}}{{end}}
+{{define "meta"}}{{with .Page.Description}}<meta name="description" content="{{.}}">{{end}}{{end}}
+{{define "content"}}
+{{.Content}}
+{{end}}
