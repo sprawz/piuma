@@ -61,7 +61,10 @@ Flags (all commands):
   -dir string    site root directory (default ".")
 
 Flags (build):
-  -out string    output directory (default <dir>/public); wiped on every build
+  -out string    output directory (default <dir>/public); wiped on every
+                 build, refused if it contains the site's source dirs
+  -base string   absolute site URL (https://example.com); when set,
+                 sitemap.xml, atom.xml and llms.txt are generated
 
 Flags (dev):
   -addr string   listen address (default ":8080")
@@ -73,9 +76,13 @@ Flags (dev):
 cd ~/code/mysite
 piuma dev              # write, save, refresh browser
 piuma format           # sanity-check everything
-piuma build            # produce public/ for deployment
-rsync -av public/ server:/var/www/   # deploy however you like
+piuma build -base https://example.com   # public/ + sitemap, atom, llms.txt
+rsync -av public/ server:/var/www/      # deploy however you like
 ```
+
+Generated feeds enumerate posts and need absolute URLs, so they only
+appear when `-base` is given — `dev` and plain `build` skip them.
+`robots.txt` is not generated: hand-write it in `static/`.
 
 ## Site layout
 
@@ -207,7 +214,7 @@ nested pages too.
 - Output pages are `<dir>/index.html` files, so any static file server
   serves clean URLs without configuration.
 
-Not included (yet, deliberately): RSS, sitemap, drafts, syntax
+Not included (yet, deliberately): drafts, syntax
 highlighting, pagination, live-reload, remote deploy. The structure has
 room for them; they'll arrive when needed.
 
