@@ -42,20 +42,20 @@ func TestBuildWithoutHomepage(t *testing.T) {
 		t.Fatalf("Build: %v", err)
 	}
 
-	postHTML := readFile(t, filepath.Join(out, "payload/hello/index.html"))
-	for _, want := range []string{"Hello", "<em>body</em>", `href="/payload/tags/google-tag-manager/"`} {
+	postHTML := readFile(t, filepath.Join(out, "blog/hello/index.html"))
+	for _, want := range []string{"Hello", "<em>body</em>", `href="/blog/tags/google-tag-manager/"`} {
 		if !strings.Contains(postHTML, want) {
 			t.Errorf("post page missing %q", want)
 		}
 	}
-	// No pages/index.md: / and /payload/ both list posts.
-	for _, p := range []string{"index.html", "payload/index.html"} {
-		if html := readFile(t, filepath.Join(out, p)); !strings.Contains(html, `href="/payload/hello"`) {
+	// No pages/index.md: / and /blog/ both list posts.
+	for _, p := range []string{"index.html", "blog/index.html"} {
+		if html := readFile(t, filepath.Join(out, p)); !strings.Contains(html, `href="/blog/hello"`) {
 			t.Errorf("%s missing post link:\n%s", p, html)
 		}
 	}
-	tagHTML := readFile(t, filepath.Join(out, "payload/tags/google-tag-manager/index.html"))
-	for _, want := range []string{"Google Tag Manager", `href="/payload/hello"`} {
+	tagHTML := readFile(t, filepath.Join(out, "blog/tags/google-tag-manager/index.html"))
+	for _, want := range []string{"Google Tag Manager", `href="/blog/hello"`} {
 		if !strings.Contains(tagHTML, want) {
 			t.Errorf("tag page missing %q", want)
 		}
@@ -80,14 +80,14 @@ func TestBuildWithHomepage(t *testing.T) {
 	if !strings.Contains(home, "Building analytics infrastructure.") {
 		t.Errorf("homepage not rendered from pages/index.md:\n%s", home)
 	}
-	if strings.Contains(home, `href="/payload/hello"`) {
+	if strings.Contains(home, `href="/blog/hello"`) {
 		t.Errorf("homepage should not be the post listing")
 	}
 	if about := readFile(t, filepath.Join(out, "about/index.html")); !strings.Contains(about, "Who I am.") {
 		t.Errorf("about page wrong:\n%s", about)
 	}
-	if payload := readFile(t, filepath.Join(out, "payload/index.html")); !strings.Contains(payload, `href="/payload/hello"`) {
-		t.Errorf("/payload/ listing missing post")
+	if listing := readFile(t, filepath.Join(out, "blog/index.html")); !strings.Contains(listing, `href="/blog/hello"`) {
+		t.Errorf("/blog/ listing missing post")
 	}
 }
 
@@ -96,7 +96,7 @@ func TestBuildKeepsOldOutputOnRenderError(t *testing.T) {
 	if err := Build(DefaultConfig(root)); err != nil {
 		t.Fatal(err)
 	}
-	good := filepath.Join(root, "public/payload/hello/index.html")
+	good := filepath.Join(root, "public/blog/hello/index.html")
 	if _, err := os.Stat(good); err != nil {
 		t.Fatal(err)
 	}
@@ -135,7 +135,7 @@ func TestBuildSkipsEmptyTagSlug(t *testing.T) {
 	if err := Build(DefaultConfig(root)); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := os.Stat(filepath.Join(root, "public/payload/tags/index.html")); !os.IsNotExist(err) {
+	if _, err := os.Stat(filepath.Join(root, "public/blog/tags/index.html")); !os.IsNotExist(err) {
 		t.Errorf("empty tag slug produced phantom listing: %v", err)
 	}
 }

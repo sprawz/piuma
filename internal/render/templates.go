@@ -36,8 +36,12 @@ type IndexData struct {
 	Posts   []*content.Post
 }
 
-// funcs is available in all templates.
-var funcs = template.FuncMap{"tagslug": content.TagSlug}
+// funcs is available in all templates. blogroot is the blog's absolute
+// path ("/blog"), so templates never spell the segment out themselves.
+var funcs = template.FuncMap{
+	"tagslug":  content.TagSlug,
+	"blogroot": func() string { return "/" + content.BlogRoot },
+}
 
 // Templates renders the site's pages. Layout scheme: layout.html is the
 // page skeleton; post.html, page.html and index.html fill its "content"

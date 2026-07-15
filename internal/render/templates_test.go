@@ -34,7 +34,7 @@ func TestEmbeddedPostTemplate(t *testing.T) {
 	out := b.String()
 	for _, want := range []string{
 		"Hello World", "<em>there</em>", "A description.",
-		`href="/payload/tags/google-tag-manager/"`,
+		`href="/blog/tags/google-tag-manager/"`,
 	} {
 		if !strings.Contains(out, want) {
 			t.Errorf("post output missing %q:\n%s", want, out)
@@ -70,7 +70,7 @@ func TestEmbeddedIndexTemplate(t *testing.T) {
 		t.Fatalf("Index: %v", err)
 	}
 	out := b.String()
-	for _, want := range []string{"Hello World", `href="/payload/hello"`, "<h1>gtm</h1>"} {
+	for _, want := range []string{"Hello World", `href="/blog/hello"`, "<h1>gtm</h1>"} {
 		if !strings.Contains(out, want) {
 			t.Errorf("index output missing %q:\n%s", want, out)
 		}

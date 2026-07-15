@@ -18,9 +18,9 @@ type Post struct {
 	Body        []byte // markdown body, without frontmatter
 }
 
-// URL is the post's site-absolute path: all posts live under /payload.
+// URL is the post's site-absolute path: all posts live under BlogRoot.
 func (p *Post) URL() string {
-	return "/payload/" + p.Slug
+	return "/" + BlogRoot + "/" + p.Slug
 }
 
 // TagSlug turns a tag name into its URL segment: lowercase, runs of

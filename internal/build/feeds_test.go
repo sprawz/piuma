@@ -34,15 +34,15 @@ func TestBuildWithBaseGeneratesFeeds(t *testing.T) {
 	for _, want := range []string{
 		"<loc>https://example.com/</loc>",
 		"<loc>https://example.com/about</loc>",
-		"<loc>https://example.com/payload/</loc>",
-		"<loc>https://example.com/payload/newer</loc>",
+		"<loc>https://example.com/blog/</loc>",
+		"<loc>https://example.com/blog/newer</loc>",
 		"<lastmod>2025-01-01</lastmod>",
 	} {
 		if !strings.Contains(sitemap, want) {
 			t.Errorf("sitemap missing %q:\n%s", want, sitemap)
 		}
 	}
-	if strings.Contains(sitemap, "/payload/tags/") {
+	if strings.Contains(sitemap, "/blog/tags/") {
 		t.Errorf("sitemap must not list tag pages:\n%s", sitemap)
 	}
 	if strings.Contains(sitemap, "example.com//") {
@@ -52,7 +52,7 @@ func TestBuildWithBaseGeneratesFeeds(t *testing.T) {
 	atom := readFile(t, filepath.Join(out, "atom.xml"))
 	for _, want := range []string{
 		"Q&amp;A &lt;old&gt;",
-		`href="https://example.com/payload/newer"`,
+		`href="https://example.com/blog/newer"`,
 		"<updated>2026-02-02T00:00:00Z</updated>",
 	} {
 		if !strings.Contains(atom, want) {
@@ -66,8 +66,8 @@ func TestBuildWithBaseGeneratesFeeds(t *testing.T) {
 	llms := readFile(t, filepath.Join(out, "llms.txt"))
 	for _, want := range []string{
 		"# My Site",
-		"- [Newer](https://example.com/payload/newer)",
-		"- [Q&A <old>](https://example.com/payload/older): Old & dusty.",
+		"- [Newer](https://example.com/blog/newer)",
+		"- [Q&A <old>](https://example.com/blog/older): Old & dusty.",
 	} {
 		if !strings.Contains(llms, want) {
 			t.Errorf("llms.txt missing %q:\n%s", want, llms)

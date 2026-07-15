@@ -44,7 +44,7 @@ func TestHandlerServesBuiltSite(t *testing.T) {
 	ts := httptest.NewServer(Handler(cfg.OutDir))
 	defer ts.Close()
 
-	if code, body := get(t, ts, "/payload/hello/"); code != 200 || !strings.Contains(body, "Body one.") {
+	if code, body := get(t, ts, "/blog/hello/"); code != 200 || !strings.Contains(body, "Body one.") {
 		t.Errorf("post page: code=%d body=%q", code, body)
 	}
 	if code, body := get(t, ts, "/"); code != 200 || !strings.Contains(body, "Hello") {

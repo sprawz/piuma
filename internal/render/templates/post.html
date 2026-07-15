@@ -6,7 +6,7 @@
   {{.Content}}
   {{with .Post.Tags}}
   <p class="tags">
-    {{range .}}<a href="/payload/tags/{{tagslug .}}/">#{{.}}</a> {{end}}
+    {{range .}}<a href="{{blogroot}}/tags/{{tagslug .}}/">#{{.}}</a> {{end}}
   </p>
   {{end}}
 </article>

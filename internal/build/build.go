@@ -42,11 +42,13 @@ func DefaultConfig(dir string) Config {
 //
 // Output layout:
 //
-//	/                    homepage (pages/index.md) or the post listing
-//	/payload/              post listing (always)
-//	/payload/<slug>/       posts
-//	/payload/tags/<tag>/   tag listings
-//	/<page>/             standalone pages
+//	/                        homepage (pages/index.md) or the post listing
+//	/<blog>/                 post listing (always)
+//	/<blog>/<slug>/          posts
+//	/<blog>/tags/<tag>/      tag listings
+//	/<page>/                 standalone pages
+//
+// <blog> is content.BlogRoot.
 //
 // The site is rendered into a staging directory next to OutDir and
 // swapped in only on success, so a failing build never destroys the
@@ -150,7 +152,7 @@ func writePost(outDir string, tpl *render.Templates, p *content.Post) error {
 	if err != nil {
 		return err
 	}
-	path := filepath.Join(outDir, "payload", p.Slug, "index.html")
+	path := filepath.Join(outDir, content.BlogRoot, p.Slug, "index.html")
 	return writePage(path, func(f *os.File) error {
 		return tpl.Post(f, render.PostData{Post: p, Content: render.HTML(body)})
 	})
@@ -170,12 +172,12 @@ func writeStandalone(outDir string, tpl *render.Templates, p *content.Page) erro
 	})
 }
 
-// writeListings renders the blog index at /payload/, one listing per tag
-// under /payload/tags/, and — when no homepage page exists — the blog
-// index again at / so zero-config sites keep working.
+// writeListings renders the blog index at /<BlogRoot>/, one listing per
+// tag under /<BlogRoot>/tags/, and — when no homepage page exists — the
+// blog index again at / so zero-config sites keep working.
 func writeListings(outDir string, tpl *render.Templates, site *content.Site) error {
 	all := render.IndexData{Posts: site.Posts}
-	if err := writeIndex(filepath.Join(outDir, "payload"), tpl, all); err != nil {
+	if err := writeIndex(filepath.Join(outDir, content.BlogRoot), tpl, all); err != nil {
 		return err
 	}
 	if site.Home() == nil {
@@ -185,7 +187,7 @@ func writeListings(outDir string, tpl *render.Templates, site *content.Site) err
 	}
 	for slug, tag := range tagIndex(site.Posts) {
 		data := render.IndexData{Heading: tag.name, Posts: tag.posts}
-		if err := writeIndex(filepath.Join(outDir, "payload", "tags", slug), tpl, data); err != nil {
+		if err := writeIndex(filepath.Join(outDir, content.BlogRoot, "tags", slug), tpl, data); err != nil {
 			return err
 		}
 	}

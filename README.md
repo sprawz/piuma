@@ -108,19 +108,24 @@ but carry no meaning: only the file name matters.
 /                    homepage (pages/index.md) — or the post listing
                      when no homepage page exists
 /<page>              each standalone page (pages/about.md → /about)
-/payload/            the post listing, always
-/payload/<slug>      each post (content/hello.md → /payload/hello)
-/payload/tags/<tag>  all posts carrying that tag
+/blog/               the post listing, always
+/blog/<slug>         each post (content/hello.md → /blog/hello)
+/blog/tags/<tag>     all posts carrying that tag
 ```
 
 The blog lives under its own path so a subdomain can serve it: point a
-vhost at `public/payload/` and posts appear at `blog.example.com/<slug>`.
+vhost at `public/blog/` and posts appear at `blog.example.com/<slug>`.
+
+That path segment is the `BlogRoot` constant in
+`internal/content/site.go`. Change it there and the routes, the output
+tree, the feeds, the reserved page name and the default templates all
+follow — nothing else spells it out.
 
 Tag URLs are slugified: lowercase, runs of non-alphanumerics become one
 dash (`Google Tag Manager` → `google-tag-manager`). In the default post
 template every tag is a link to its listing.
 
-Reserved names: a page cannot be called `payload`, a post cannot be
+Reserved names: a page cannot be called `blog`, a post cannot be
 called `tags`, and duplicate slugs are errors — `format` and `build`
 refuse with a message naming the offending files.
 
@@ -192,8 +197,8 @@ leaves holes; the others fill them:
 Data available: `post.html` gets `.Post` (Slug, Title, Excerpt,
 Description, Tags, PublishDate) and `.Content` (rendered body);
 `page.html` gets `.Page` and `.Content`; `index.html` gets `.Posts`
-(newest first) and `.Heading`. The `tagslug` function is available
-everywhere: `/payload/tags/{{tagslug .}}/`.
+(newest first) and `.Heading`. The `tagslug` and `blogroot` functions
+are available everywhere: `{{blogroot}}/tags/{{tagslug .}}/`.
 
 CSS, fonts, favicons and images belong in `static/` and are referenced
 by absolute path (`/styles.css`, `/fonts/...`) so they resolve from

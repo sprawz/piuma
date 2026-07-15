@@ -10,9 +10,16 @@ import (
 	"strings"
 )
 
-// Reserved slugs: /payload is the blog root, /payload/tags the tag listings.
+// BlogRoot is the single URL segment every post lives under:
+// /<BlogRoot>/ is the listing, /<BlogRoot>/<slug> a post and
+// /<BlogRoot>/tags/<tag> a tag listing. Change it here and the routes,
+// the output tree, the feeds and the templates all follow.
+const BlogRoot = "blog"
+
+// Reserved slugs: a page cannot shadow the blog root, a post cannot
+// shadow the tag listings at /<BlogRoot>/tags.
 const (
-	reservedPageSlug = "payload"
+	reservedPageSlug = BlogRoot
 	reservedPostSlug = "tags"
 )
 

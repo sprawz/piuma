@@ -49,7 +49,7 @@ func writeSitemap(f *os.File, base string, site *content.Site) error {
 			sm.URLs = append(sm.URLs, sitemapURL{Loc: base + p.URL()})
 		}
 	}
-	sm.URLs = append(sm.URLs, sitemapURL{Loc: base + "/payload/"})
+	sm.URLs = append(sm.URLs, sitemapURL{Loc: base + "/" + content.BlogRoot + "/"})
 	for _, p := range site.Posts {
 		sm.URLs = append(sm.URLs, sitemapURL{
 			Loc:     base + p.URL(),
@@ -89,7 +89,7 @@ func writeAtom(f *os.File, base string, site *content.Site) error {
 	feed := atomFeed{
 		NS:      "http://www.w3.org/2005/Atom",
 		Title:   siteTitle(site),
-		Link:    atomLink{Href: base + "/payload/", Rel: "alternate"},
+		Link:    atomLink{Href: base + "/" + content.BlogRoot + "/", Rel: "alternate"},
 		ID:      base + "/",
 		Updated: time.Now().UTC().Format(time.RFC3339),
 	}

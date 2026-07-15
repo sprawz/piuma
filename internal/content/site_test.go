@@ -43,8 +43,8 @@ func TestLoad(t *testing.T) {
 	if site.Posts[0].Title != "Newer" || site.Posts[1].Title != "Older" {
 		t.Errorf("posts not sorted newest first: %q, %q", site.Posts[0].Title, site.Posts[1].Title)
 	}
-	if got := site.Posts[1].URL(); got != "/payload/older" {
-		t.Errorf("URL = %q, want /payload/older", got)
+	if got := site.Posts[1].URL(); got != "/blog/older" {
+		t.Errorf("URL = %q, want /blog/older", got)
 	}
 	if len(site.Pages) != 2 {
 		t.Fatalf("got %d pages, want 2", len(site.Pages))
@@ -73,7 +73,7 @@ func TestLoadCollectsAllErrors(t *testing.T) {
 	writeFile(t, filepath.Join(root, "content/tags.md"), post("2026-01-01T00:00:00Z", "Reserved"))
 	writeFile(t, filepath.Join(root, "content/dup.md"), post("2026-01-01T00:00:00Z", "Dup"))
 	writeFile(t, filepath.Join(root, "content/sub/dup.md"), post("2026-01-01T00:00:00Z", "Dup2"))
-	writeFile(t, filepath.Join(root, "pages/payload.md"), page("Reserved"))
+	writeFile(t, filepath.Join(root, "pages/blog.md"), page("Reserved"))
 	writeFile(t, filepath.Join(root, "pages/untitled.md"), "---\ndescription: x\n---\nbody\n")
 
 	_, err := Load(filepath.Join(root, "content"), filepath.Join(root, "pages"))
