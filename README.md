@@ -1,5 +1,6 @@
 # piuma
 
+[![CI](https://github.com/sprawz/piuma/actions/workflows/ci.yml/badge.svg)](https://github.com/sprawz/piuma/actions/workflows/ci.yml)
 ![Go Version](https://img.shields.io/badge/go-1.23%2B-00ADD8?logo=go)
 [![License](https://img.shields.io/badge/license-BSD--3--Clause-blue)](LICENSE)
 
