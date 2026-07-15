@@ -41,7 +41,7 @@ func main() {
 }
 
 func usage(w *os.File) {
-	fmt.Fprint(w, `piuma — minimal static site builder: markdown in, HTML out.
+	_, _ = fmt.Fprint(w, `piuma — minimal static site builder: markdown in, HTML out.
 
 usage: piuma <command> [flags]
 
@@ -74,7 +74,7 @@ Run "piuma <command> -h" for that command's flags.
 // site root after parsing.
 func siteFlags(fs *flag.FlagSet, args []string) string {
 	dir := fs.String("dir", ".", "site root directory")
-	fs.Parse(args)
+	_ = fs.Parse(args) // ExitOnError: Parse never returns an error
 	return *dir
 }
 

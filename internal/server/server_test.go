@@ -31,7 +31,7 @@ func get(t *testing.T, ts *httptest.Server, path string) (int, string) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer res.Body.Close()
+	defer func() { _ = res.Body.Close() }()
 	body, _ := io.ReadAll(res.Body)
 	return res.StatusCode, string(body)
 }

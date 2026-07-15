@@ -69,7 +69,7 @@ func Build(cfg Config) error {
 	if err := os.RemoveAll(stage); err != nil {
 		return err
 	}
-	defer os.RemoveAll(stage)
+	defer func() { _ = os.RemoveAll(stage) }()
 	if err := renderSite(stage, cfg, tpl, site); err != nil {
 		return err
 	}
@@ -95,7 +95,7 @@ func Validate(cfg Config) (*content.Site, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer os.RemoveAll(dir)
+	defer func() { _ = os.RemoveAll(dir) }()
 	// A dummy base exercises the feed writers even when the real build
 	// will run without -base.
 	cfg.BaseURL = "https://validate.invalid"
@@ -233,7 +233,7 @@ func writePage(path string, render func(*os.File) error) error {
 		return err
 	}
 	if err := render(f); err != nil {
-		f.Close()
+		_ = f.Close() // the render error is the one worth reporting
 		return err
 	}
 	return f.Close()
