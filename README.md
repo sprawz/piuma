@@ -33,7 +33,7 @@ markdown, it writes HTML.
 From a checkout:
 
 ```bash
-git clone <this repo> && cd piuma
+git clone https://github.com/sprawz/piuma && cd piuma
 go install .
 ```
 
