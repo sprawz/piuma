@@ -1,4 +1,4 @@
-module github.com/paolobietolini/piuma
+module github.com/sprawz/piuma
 
 go 1.26.2
 

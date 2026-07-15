@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/paolobietolini/piuma/internal/content"
+	"github.com/sprawz/piuma/internal/content"
 )
 
 func samplePost() *content.Post {

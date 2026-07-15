@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/paolobietolini/piuma/internal/build"
+	"github.com/sprawz/piuma/internal/build"
 )
 
 const pollInterval = 500 * time.Millisecond

@@ -8,7 +8,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/paolobietolini/piuma/internal/content"
+	"github.com/sprawz/piuma/internal/content"
 )
 
 //go:embed templates/*.html

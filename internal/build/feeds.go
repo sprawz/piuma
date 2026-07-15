@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/paolobietolini/piuma/internal/content"
+	"github.com/sprawz/piuma/internal/content"
 )
 
 // writeFeeds emits sitemap.xml, atom.xml and llms.txt at the output

@@ -10,8 +10,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/paolobietolini/piuma/internal/build"
-	"github.com/paolobietolini/piuma/internal/server"
+	"github.com/sprawz/piuma/internal/build"
+	"github.com/sprawz/piuma/internal/server"
 )
 
 func main() {

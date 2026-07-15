@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/paolobietolini/piuma/internal/content"
-	"github.com/paolobietolini/piuma/internal/render"
+	"github.com/sprawz/piuma/internal/content"
+	"github.com/sprawz/piuma/internal/render"
 )
 
 // Config holds the directories of a site project.
